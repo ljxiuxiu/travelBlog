@@ -1,0 +1,65 @@
+<!--  上面的所有的内容，都是继承自layout.html页面的 -->
+{%extends 'layout.html'%}
+
+<!--实现块-->
+{%block main%}
+<ol class="breadcrumb">
+    <li><a href="/">管理首页</a></li>
+    <li><span>内容列表</span></li>
+</ol>
+
+<h3>内容列表</h3>
+
+<table class="table table-hover table-striped">
+    <tr>
+        <th>ID</th>
+        <th>景点名称</th>
+        <th>图片</th>
+        <!--<th>内容</th>-->
+        <th>评论</th>
+        <th>阅读量</th>
+        <th>操作</th>
+    </tr>
+    {% for content in contents %}
+    <tr>
+        <td>{{content.cid}}</td>
+        <td>{{content.cname}}</td>
+        <td><img style="width: 80px;height: 60px;" src="../{{content.photo}}" /></td>
+        <!--<td>{{content.content}}</td>-->
+        <td>{{content.comments}}</td>
+        <td>{{content.views}}</td>
+        <td>
+            <a href="/admin/jd/edit?cid={{content.cid}}">修改</a> |
+            <a href="javascript:void(0)" onclick="del('{{content.cid}}')">删除</a>
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+
+<script>
+    function del(cid){
+        var cid=Number(cid);
+        var flag=confirm("确认要删除此数据吗？");
+        if(flag){
+            $.ajax({
+                type:"post",
+                url:"/admin/content/jd/del",
+                data:{
+                    cid:cid
+                },
+                success: function (data) {
+                    if(data=="0"){
+                        alert("网络问题，删除失败");
+                    }else if(data=="1"){
+                        //修改成功，重新加载页面
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+<!--{% include 'page.html' %}-->
+
+{%endblock%}

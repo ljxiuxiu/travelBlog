@@ -1,0 +1,65 @@
+<!--  上面的所有的内容，都是继承自layout.html页面的 -->
+{%extends 'layout.html'%}
+
+<!--实现块-->
+{%block main%}
+<ol class="breadcrumb">
+    <li><a href="/">管理首页</a></li>
+    <li><span>内容列表</span></li>
+</ol>
+
+<h3>内容列表</h3>
+
+<table class="table table-hover table-striped">
+    <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>图片</th>
+        <!--<th>内容</th>-->
+        <th>操作</th>
+    </tr>
+    {% for f in foods %}
+    <tr>
+        <td>{{f.fid}}</td>
+        <td>{{f.fname}}</td>
+        <td><img style="width: 80px;height: 60px;" src="../{{f.photo}}" /></td>
+        <!--<td>{{f.intro}}</td>-->
+        <td>
+            <a href="/admin/ms/edit?fid={{f.fid}}">修改</a> |
+            <a href="javascript:void(0)" onclick="del('{{f.fid}}')">删除</a>
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+
+<a href="/admin/ms_add" style="display: inline-block;width: 50px;height: 25px;background: #F76447;line-height:25px;color: #fff;text-align: center;">添加</a>
+
+<script>
+    function del(fid){
+        var fid=Number(fid);
+        var flag=confirm("确认要删除此数据吗？");
+        if(flag){
+            $.ajax({
+                type:"post",
+                url:"/admin/content/ms/del",
+                data:{
+                    fid:fid
+                },
+                success: function (data) {
+                    if(data=="0"){
+                        alert("网络问题，删除失败");
+                    }else if(data=="1"){
+                        //修改成功，重新加载页面
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+
+</script>
+
+<!--{% include 'page.html' %}-->
+
+{%endblock%}

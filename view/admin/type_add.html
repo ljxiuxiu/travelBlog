@@ -1,0 +1,47 @@
+<!--  上面的所有的内容，都是继承自layout.html页面的 -->
+{%extends 'layout.html'%}
+
+<!--实现块-->
+{%block main%}
+<h3>分类添加</h3>
+
+<form method="">
+    <div class="form-group">
+        <label for="tname">分类名称：</label>
+        <input type="text" class="form-control" id="tname" placeholder="请输入分类名称" name="tname">
+    </div>
+    <div id="msg" style="display: none;"></div>
+    <button type="button" class="btn btn-default"  id="sub">提交</button>
+</form>
+
+<script>
+    $("#sub").on("click", function () {
+        var tname=$("#tname").val();
+        //发送ajax请求
+        $.ajax({
+            type:"post",
+            url:"/admin/category/add",
+            data:{
+                tname:tname
+            },
+            dataType:'json',
+            success: function (data) {
+                if(data.code==0){
+                    $("#msg").html(data.messages).css("color","red").show();
+                    $("#tname").val("");
+                }else if(data.code==1){
+                    //修改成功 重新加载页面
+                    $("#msg").html(data.messages).css("color","lime").show();
+                    setTimeout(function () {
+//                        window.location.reload();
+                        $("#msg").hide();
+                        $("#tname").val("");
+                    },1500);
+
+                }
+            }
+        });
+    });
+</script>
+
+{%endblock%}
