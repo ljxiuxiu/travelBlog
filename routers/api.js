@@ -102,10 +102,9 @@ router.post("/user/login", function (req,res) {
 
 
 //退出
-router.get("/exit", function (req,res) {
-    var session=req.session.userInfo;
-    session.invalidate();
-    console.log(req.session.userInfo);
+router.post("/user/exit", function (req,res) {
+    req.session.userInfo="";
+    res.send("0");
 })
 
 //第三步，将这个支线模块，加载到主模块里面去

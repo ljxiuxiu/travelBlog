@@ -172,14 +172,14 @@ $(function() {
     //退出
     $("#btn_exit").click(function () {
         $.ajax({
-            type:"get",
-            url:"/exit",
-            data:{},
+            type:"post",
+            url:"/api/user/exit",
             success: function (result) {
-                
+                if(result=="0"){
+                    window.location.reload();
+                    alert("退出成功");
+                }
             }
         })
-        window.location.reload();
-        alert("退出成功");
     })
 })
